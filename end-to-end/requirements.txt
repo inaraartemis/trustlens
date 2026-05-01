@@ -1,0 +1,14 @@
+torch
+transformers<5
+scikit-learn
+pandas
+numpy
+nltk
+textblob
+matplotlib
+seaborn
+streamlit
+requests
+beautifulsoup4
+fastapi
+uvicorn

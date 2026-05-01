@@ -1,0 +1,4 @@
+BiLSTM Accuracy: 0.9993
+BiLSTM AUC: 0.9999794727377872
+Attention Accuracy: 0.9996
+Attention AUC: 0.9999827265699579

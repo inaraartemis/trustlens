@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustLens | Forensic Intelligence Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="cursor-glow" id="cursor-glow"></div>
+
+    <nav class="nav-bar">
+        <div class="logo">TRUST<span class="accent">LENS</span></div>
+        <div class="nav-links">
+            <button class="nav-item active" data-view="home">Dashboard</button>
+            <button class="nav-item" data-view="evidence">Evidence</button>
+            <button class="nav-item" data-view="metrics">Forensics</button>
+            <button class="nav-item" data-view="architecture">Pipeline</button>
+            <button class="nav-item" data-view="analyzer">Analyzer</button>
+        </div>
+    </nav>
+
+    <!-- VIEW 1: HOME -->
+    <section id="view-home" class="view active">
+        <div class="hero-bento">
+            <div class="bento-card hero-main">
+                <span class="badge">V1.2.0 RESEARCH CORE</span>
+                <h1>Cognitive <br><span class="gradient">Verification</span></h1>
+                <p>Advanced neural verification for digital forensics. Analyzing linguistic DNA and contextual coherence.</p>
+                <div style="margin-top: 2rem;">
+                    <button class="btn-trigger" onclick="switchView('analyzer')">Execute Analysis</button>
+                </div>
+            </div>
+            
+            <div class="bento-card module-mini dl">
+                <header>
+                    <span style="color:var(--accent); font-weight:800; font-size:0.6rem; letter-spacing:2px;">ENGINE ALPHA</span>
+                    <h3>BiLSTM + Attention</h3>
+                </header>
+                <p style="font-size:0.8rem; color:var(--text-dim); margin-top:1rem;">Mapping sequential long-range dependencies across 200-token vectors.</p>
+            </div>
+
+            <div class="bento-card module-mini nlp">
+                <header>
+                    <span style="color:var(--neon); font-weight:800; font-size:0.6rem; letter-spacing:2px;">ENGINE BETA</span>
+                    <h3>BERT Hybrid</h3>
+                </header>
+                <p style="font-size:0.8rem; color:var(--text-dim); margin-top:1rem;">Semantic pooling with stylometric feature concatenation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIEW 2: EVIDENCE EXPLORER (NEW) -->
+    <section id="view-evidence" class="view hidden">
+        <header style="margin-bottom:4rem; text-align:center;">
+            <h2 style="font-size:3rem; font-weight:900;">Forensic Evidence</h2>
+            <p style="color:var(--text-dim);">Browse sample cases from the LIAR and FakeNewsNet training corpora.</p>
+        </header>
+        <div class="evidence-grid">
+            <div class="evidence-card" onclick="showModal('case-1')">
+                <h5>REAL / POLITICAL</h5>
+                <p>"The unemployment rate in Ohio has dropped to 4.2%..."</p>
+                <span style="font-size:0.6rem; color:var(--text-dim); display:block; margin-top:1.5rem;">SOURCE: LIAR DATASET</span>
+            </div>
+            <div class="evidence-card" onclick="showModal('case-2')">
+                <h5>FAKE / SENSATIONAL</h5>
+                <p>"NASA scientists find evidence of alien structures on Mars..."</p>
+                <span style="font-size:0.6rem; color:var(--text-dim); display:block; margin-top:1.5rem;">SOURCE: FAKENEWSNET</span>
+            </div>
+            <div class="evidence-card" onclick="showModal('case-3')">
+                <h5>FAKE / PROPAGANDA</h5>
+                <p>"Secret documents reveal planned takeover of power grid..."</p>
+                <span style="font-size:0.6rem; color:var(--text-dim); display:block; margin-top:1.5rem;">SOURCE: LIAR DATASET</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIEW 3: FORENSICS -->
+    <section id="view-metrics" class="view hidden">
+        <h2 style="font-size: 3.5rem; font-weight: 900; margin-bottom: 4rem; text-align: center;">Research Metrics</h2>
+        <div class="stats-row">
+            <div class="stat-box"><strong>0.86</strong><span>AUC-ROC Separation</span></div>
+            <div class="stat-box" style="border-bottom-color: var(--neon);"><strong>0.89</strong><span>F1-Score Hybrid</span></div>
+            <div class="stat-box"><strong>84%</strong><span>Context Precision</span></div>
+        </div>
+        <div class="bento-card" style="margin-top:3rem;">
+            <h3>Error Distribution</h3>
+            <div style="display:flex; gap:2rem; margin-top:2rem;">
+                <div style="flex:1;">
+                    <label style="font-size:0.7rem; color:var(--text-dim);">SARCASM DETECTION</label>
+                    <div style="height:4px; background:#111; margin-top:5px;"><div style="height:100%; width:40%; background:var(--fake);"></div></div>
+                </div>
+                <div style="flex:1;">
+                    <label style="font-size:0.7rem; color:var(--text-dim);">DOMAIN SHIFT</label>
+                    <div style="height:4px; background:#111; margin-top:5px;"><div style="height:100%; width:30%; background:var(--fake);"></div></div>
+                </div>
+                <div style="flex:1;">
+                    <label style="font-size:0.7rem; color:var(--text-dim);">BIAS OVERFIT</label>
+                    <div style="height:4px; background:#111; margin-top:5px;"><div style="height:100%; width:30%; background:var(--fake);"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIEW 4: PIPELINE -->
+    <section id="view-architecture" class="view hidden">
+        <div class="bento-card" style="max-width: 900px; margin: 0 auto;">
+            <h3 style="font-size: 2rem; margin-bottom: 3rem;">Neural Pipeline Architecture</h3>
+            <div class="pipeline-stack" style="display:flex; flex-direction:column; gap:2rem;">
+                <div class="pipe-step" style="background:rgba(255,255,255,0.02); padding:2rem; border-radius:20px; border:1px solid var(--border);">
+                    <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                        <h4 style="color:var(--accent);">01 | EMBEDDING LAYER</h4>
+                        <span style="font-size:0.6rem; opacity:0.5;">DIM: 128</span>
+                    </header>
+                    <p style="font-size:0.85rem; color:var(--text-dim);">Converting tokens into high-dimensional geometric space for semantic mapping.</p>
+                </div>
+                <div class="pipe-step" style="background:rgba(255,255,255,0.02); padding:2rem; border-radius:20px; border:1px solid var(--border);">
+                    <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                        <h4 style="color:var(--accent);">02 | BIDIRECTIONAL LSTM</h4>
+                        <span style="font-size:0.6rem; opacity:0.5;">HIDDEN: 256 | LAYERS: 2</span>
+                    </header>
+                    <p style="font-size:0.85rem; color:var(--text-dim);">Capturing forward and backward dependencies to identify narrative inconsistencies.</p>
+                </div>
+                <div class="pipe-step" style="background:rgba(255,255,255,0.02); padding:2rem; border-radius:20px; border:1px solid var(--border);">
+                    <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                        <h4 style="color:var(--neon);">03 | HYBRID BERT POOLER</h4>
+                        <span style="font-size:0.6rem; opacity:0.5;">BERT-BASE | TF-IDF | VADER</span>
+                    </header>
+                    <p style="font-size:0.85rem; color:var(--text-dim);">Fine-tuned Transformer output merged with stylometric signals (ADJ density, sentiment).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIEW 5: ANALYZER -->
+    <section id="view-analyzer" class="view hidden">
+        <div class="dashboard-grid">
+            <aside class="control-sidebar">
+                <div class="tab-switcher">
+                    <button class="tab-opt active" data-mode="text">RAW TEXT</button>
+                    <button class="tab-opt" data-mode="url">WEB URL</button>
+                </div>
+                <textarea id="text-input" placeholder="Input article text for forensic audit..."></textarea>
+                <input type="url" id="url-input" placeholder="Enter URL..." class="hidden" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border); border-radius:18px; padding:1.2rem; color:white; margin-bottom:2rem;">
+                <button id="analyze-btn" class="btn-trigger">RUN SYSTEM AUDIT</button>
+
+                <div id="processing-steps" class="terminal-log hidden" style="margin-top: 3rem;">
+                    <div class="log-line" id="step-1">CORE BOOTING...</div>
+                    <div class="log-line" id="step-2">SEQUENTIAL MAPPING...</div>
+                    <div class="log-line" id="step-3">STYLISTIC EXTRACTION...</div>
+                    <div class="log-line" id="step-4">ENSEMBLE CALCULATED.</div>
+                </div>
+            </aside>
+
+            <main class="output-room">
+                <div id="welcome-msg" style="text-align: center; margin-top: 15rem; opacity: 0.15;">
+                    <p style="letter-spacing: 5px;">AWAITING COMMAND</p>
+                </div>
+
+                <div id="results-dashboard" class="hidden">
+                    <div class="verdict-hero">
+                        <span style="font-size:0.7rem; letter-spacing:5px; color:var(--text-dim);">SYSTEM VERDICT</span>
+                        <h1 id="verdict-label">---</h1>
+                        <div class="confidence-bar">
+                            <div class="bar-track"><div id="trust-bar" class="bar-fill"></div></div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); margin-top: 1rem;">
+                                <span>RELIABLE</span>
+                                <span id="confidence-val">CONFIDENCE: 0%</span>
+                                <span>SUSPICIOUS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="engine-grid">
+                        <div class="engine-card">
+                            <header><h4 style="font-size:0.7rem; color:var(--accent); margin-bottom:1.5rem;">CONTEXTUAL MAP (DL)</h4></header>
+                            <div id="heatmap-container" class="heatmap-display"></div>
+                        </div>
+                        <div class="engine-card">
+                            <header><h4 style="font-size:0.7rem; color:var(--neon); margin-bottom:1.5rem;">STYLISTIC DNA (NLP)</h4></header>
+                            <div class="style-metrics" style="display:flex; flex-direction:column; gap:1.5rem;">
+                                <div>
+                                    <label style="font-size:0.7rem; color:var(--text-dim); display:block; margin-bottom:0.5rem;">ADJECTIVE/NOUN RATIO</label>
+                                    <div style="height:6px; background:rgba(0,0,0,0.3); border-radius:4px; overflow:hidden;"><div id="ratio-bar" style="height:100%; background:var(--neon); width:0%;"></div></div>
+                                </div>
+                                <div>
+                                    <label style="font-size:0.7rem; color:var(--text-dim); display:block; margin-bottom:0.5rem;">SENTIMENT POLARITY</label>
+                                    <div style="height:1px; background:var(--border); position:relative; margin:1rem 0;"><div id="sentiment-marker" style="width:12px; height:12px; background:white; border-radius:50%; position:absolute; top:50%; transform:translate(-50%,-50%); left:50%; box-shadow:0 0 15px white;"></div></div>
+                                </div>
+                                <div id="keyword-tags" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- Modal for Evidence -->
+    <div id="evidence-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h4 id="modal-title" style="color:var(--neon); margin-bottom:1rem;">Case Study</h4>
+            <p id="modal-text" style="line-height:1.8; color:var(--text-dim);"></p>
+            <button onclick="closeModal()" style="margin-top:2rem; background:white; color:black; border:none; padding:0.8rem 2rem; font-weight:800; border-radius:12px; cursor:pointer;">CLOSE</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
