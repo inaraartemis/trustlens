@@ -56,39 +56,6 @@
             background: #03050d;
         }
 
-        .hero-parallax-bg {
-            position: absolute;
-            top: -20%;
-            left: -20%;
-            width: 140%;
-            height: 140%;
-            background-image: 
-                linear-gradient(rgba(0, 245, 212, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 245, 212, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            background-position: center;
-            z-index: 0;
-            transform-style: preserve-3d;
-            transition: transform 0.5s cubic-bezier(0.1, 0, 0.2, 1);
-            pointer-events: none;
-            opacity: 0.4;
-        }
-
-        .hero-parallax-bg::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, transparent 20%, #03050d 80%);
-        }
-
-        .hero-core, .container {
-            position: relative;
-            z-index: 2;
-        }
-
         #particle-canvas {
             position: absolute;
             top: 0;
@@ -96,8 +63,12 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            opacity: 0.4;
             pointer-events: none;
+        }
+
+        .hero-core, .container {
+            position: relative;
+            z-index: 2;
         }
 
         .hero-core {
@@ -1024,7 +995,6 @@
 
     <!-- 1. HERO -->
     <section id="hero">
-        <div class="hero-parallax-bg" id="hero-bg"></div>
         <canvas id="particle-canvas"></canvas>
         <div class="hero-core">
             <div class="pulse-ring"></div>

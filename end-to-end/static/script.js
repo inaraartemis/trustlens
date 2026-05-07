@@ -275,31 +275,100 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 1. DYNAMIC HERO PARALLAX
-    const hero = document.getElementById('hero');
-    const heroBg = document.getElementById('hero-bg');
+    // 1. ANTIGRAVITY VORTEX ENGINE
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const particleCount = 1500;
+    let mouse = { x: null, y: null, radius: 150 };
 
-    if (hero && heroBg) {
-        hero.addEventListener('mousemove', (e) => {
-            const { clientX, clientY } = e;
-            const { innerWidth, innerHeight } = window;
-            
-            // Normalize coordinates (-1 to 1)
-            const x = (clientX / innerWidth - 0.5) * 2;
-            const y = (clientY / innerHeight - 0.5) * 2;
-            
-            // Calculate rotation angles (Max 15 degrees)
-            const rotateY = x * 15;
-            const rotateX = -y * 15;
-            
-            heroBg.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(0)`;
-        });
-
-        // Reset on mouse leave
-        hero.addEventListener('mouseleave', () => {
-            heroBg.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0)`;
-        });
+    function initCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     }
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+
+        reset() {
+            // Distribute in a spherical vortex
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * (Math.max(canvas.width, canvas.height) * 0.8);
+            this.baseX = canvas.width / 2 + Math.cos(angle) * distance;
+            this.baseY = canvas.height / 2 + Math.sin(angle) * distance;
+            this.x = this.baseX;
+            this.y = this.baseY;
+            this.size = Math.random() * 1.5 + 0.5;
+            this.color = Math.random() > 0.5 ? '#00f5d4' : '#6366f1';
+            this.density = (Math.random() * 30) + 1;
+        }
+
+        update() {
+            let dx = mouse.x - this.x;
+            let dy = mouse.y - this.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            let forceDirectionX = dx / distance;
+            let forceDirectionY = dy / distance;
+            let maxDistance = mouse.radius;
+            let force = (maxDistance - distance) / maxDistance;
+            let directionX = forceDirectionX * force * this.density;
+            let directionY = forceDirectionY * force * this.density;
+
+            if (distance < mouse.radius) {
+                this.x -= directionX;
+                this.y -= directionY;
+            } else {
+                if (this.x !== this.baseX) {
+                    let dx = this.x - this.baseX;
+                    this.x -= dx / 10;
+                }
+                if (this.y !== this.baseY) {
+                    let dy = this.y - this.baseY;
+                    this.y -= dy / 10;
+                }
+            }
+        }
+
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.fill();
+        }
+    }
+
+    function init() {
+        particles = [];
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+        }
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    });
+
+    window.addEventListener('resize', () => {
+        initCanvas();
+        init();
+    });
+
+    initCanvas();
+    init();
+    animate();
 
     // 2. SCROLL REVEAL LOGIC
     const observerOptions = {
