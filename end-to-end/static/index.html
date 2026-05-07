@@ -996,13 +996,21 @@
         <div class="container">
             <h1 class="hero-title">TrustLens</h1>
             <p class="hero-subtitle">Forensic Misinformation Detection</p>
-            <div style="display: flex; gap: 1.5rem; justify-content: center;">
-                <a href="#auditor" class="btn"
-                    style="background: var(--cyan); color: #000; padding: 1rem 3rem; border-radius: 12px; font-weight: 800; text-decoration: none;">🔍
-                    AUDIT PAYLOAD</a>
-                <a href="https://github.com/ArpitaArtemis/fake-news-detection" target="_blank" class="btn"
-                    style="border: 1px solid var(--border); color: #fff; padding: 1rem 3rem; border-radius: 12px; font-weight: 800; text-decoration: none; display: flex; align-items: center; gap: 0.8rem;">
-                    <i class="fab fa-github"></i> GITHUB REPO</a>
+            <div style="margin-top: 4rem; display: flex; flex-direction: column; align-items: center; gap: 2rem;">
+                <p style="font-family: 'JetBrains Mono'; letter-spacing: 4px; color: #475569; font-size: 0.9rem;">EXPLORE FULL RESEARCH ARCHITECTURE & DATASETS</p>
+                
+                <a href="https://github.com/ArpitaArtemis/fake-news-detection" target="_blank" 
+                    style="display: flex; align-items: center; gap: 1.5rem; background: rgba(0, 245, 212, 0.05); border: 2px solid var(--cyan); color: var(--cyan); padding: 1.2rem 4rem; border-radius: 50px; font-weight: 800; text-decoration: none; font-size: 1.2rem; transition: 0.3s; box-shadow: 0 0 30px rgba(0, 245, 212, 0.1);">
+                    <i class="fab fa-github" style="font-size: 1.5rem;"></i> VIEW ON GITHUB
+                </a>
+
+                <a href="#" style="color: #64748b; text-decoration: none; font-size: 1rem; border-bottom: 1px solid #334155; padding-bottom: 2px; transition: 0.3s;">
+                    Download Technical Whitepaper <i class="fas fa-external-link-alt" style="font-size: 0.8rem; margin-left: 5px;"></i>
+                </a>
+                
+                <div style="margin-top: 2rem;">
+                    <a href="#auditor" style="color: var(--cyan); text-decoration: none; font-weight: 700; font-size: 0.9rem; letter-spacing: 2px;">[ SCAN_PAYLOAD ]</a>
+                </div>
             </div>
         </div>
     </section>
@@ -1013,14 +1021,14 @@
             <div class="glass-panel">
                 <h2 style="font-size: 3.5rem; font-weight: 800; margin-bottom: 3rem; letter-spacing: -2px;">Operational
                     Forensic Strategy</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;">
-                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); padding: 3rem; border-radius: 24px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: stretch;">
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); padding: 3rem; border-radius: 24px; display: flex; flex-direction: column;">
                         <h4 style="color: var(--cyan); margin-bottom: 1.5rem; font-family: 'JetBrains Mono'; font-size: 1.3rem;">[PHASE_01] Sequential Neural Auditing</h4>
-                        <p style="color: #94a3b8; font-size: 1rem; line-height: 2;">Our engine implements <strong>BiLSTM with self-attention</strong> to map temporal misinformation cascades. Trained on the <strong>LIAR & FakeNewsNet</strong> corpora, the architecture utilizes scaled dot-product attention to isolate high-impact tokens, achieving a benchmarked <strong>AUC of 0.86</strong> for sequential news classification.</p>
+                        <p style="color: #94a3b8; font-size: 1rem; line-height: 2; flex: 1;">Our engine implements <strong>BiLSTM with self-attention</strong> to map temporal misinformation cascades. Trained on the <strong>LIAR & FakeNewsNet</strong> corpora, the architecture utilizes scaled dot-product attention to isolate high-impact tokens, achieving a benchmarked <strong>AUC of 0.86</strong> for sequential news classification.</p>
                     </div>
-                    <div style="background: rgba(0, 245, 212, 0.03); border: 1px solid rgba(0, 245, 212, 0.1); padding: 3rem; border-radius: 24px;">
+                    <div style="background: rgba(0, 245, 212, 0.03); border: 1px solid rgba(0, 245, 212, 0.1); padding: 3rem; border-radius: 24px; display: flex; flex-direction: column;">
                         <h4 style="margin-bottom: 1.5rem; font-size: 1.3rem; font-family: 'JetBrains Mono'; color: #fff;">[PHASE_02] Contextual Semantic Fusion</h4>
-                        <p style="color: #94a3b8; font-size: 1rem; line-height: 2;">Leveraging <strong>BERT-base-uncased</strong> architecture, we fuse deep contextual embeddings with classical stylometric feature vectors. By concatenating <strong>BERT [CLS] outputs</strong> with POS tag distributions and sentiment polarity signals, the system provides a multi-perspective forensic verdict on adversarial payloads.</p>
+                        <p style="color: #94a3b8; font-size: 1rem; line-height: 2; flex: 1;">Leveraging <strong>BERT-base-uncased</strong> architecture, we fuse deep contextual embeddings with classical stylometric feature vectors. By concatenating <strong>BERT [CLS] outputs</strong> with POS tag distributions and sentiment polarity signals, the system provides a multi-perspective forensic verdict on adversarial payloads.</p>
                     </div>
                 </div>
             </div>
@@ -1080,16 +1088,6 @@
                 </div>
             </div>
 
-            <div class="learn-more-container" id="workflow-cta">
-                <p style="color: #64748b; margin-bottom: 2rem; font-family: 'JetBrains Mono';">EXPLORE FULL RESEARCH ARCHITECTURE & DATASETS</p>
-                <a href="https://github.com/ArpitaArtemis/fake-news-detection" target="_blank" class="github-btn">
-                    <i class="fab fa-github"></i> View on GitHub
-                </a>
-                <div style="margin-top: 2rem;">
-                    <a href="#" style="color: #475569; text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid #1e293b;">
-                        Download Technical Whitepaper <i class="fas fa-external-link-alt" style="font-size: 0.7rem;"></i>
-                    </a>
-                </div>
             </div>
         </div>
     </section>
