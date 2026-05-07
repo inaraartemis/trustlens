@@ -51,9 +51,26 @@
             align-items: center;
             text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+
+        .hero-parallax-bg {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
             background: linear-gradient(rgba(3, 5, 13, 0.7), rgba(3, 5, 13, 0.9)), url('hero_truth.png');
             background-size: cover;
             background-position: center;
+            z-index: 0;
+            transition: transform 0.2s cubic-bezier(0.1, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .hero-core, .container {
+            position: relative;
+            z-index: 2;
         }
 
         #particle-canvas {
@@ -991,6 +1008,7 @@
 
     <!-- 1. HERO -->
     <section id="hero">
+        <div class="hero-parallax-bg" id="hero-bg"></div>
         <canvas id="particle-canvas"></canvas>
         <div class="hero-core">
             <div class="pulse-ring"></div>

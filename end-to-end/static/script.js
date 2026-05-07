@@ -275,6 +275,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // 1. DYNAMIC HERO PARALLAX
+    const hero = document.getElementById('hero');
+    const heroBg = document.getElementById('hero-bg');
+
+    if (hero && heroBg) {
+        hero.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const { innerWidth, innerHeight } = window;
+            
+            // Calculate offset from center (-0.5 to 0.5)
+            const moveX = (clientX / innerWidth) - 0.5;
+            const moveY = (clientY / innerHeight) - 0.5;
+            
+            // Intensity of the shift
+            const intensity = 30; 
+            
+            heroBg.style.transform = `translate(${moveX * intensity}px, ${moveY * intensity}px) scale(1.05)`;
+        });
+    }
+
+    // 2. SCROLL REVEAL LOGIC
+    const observerOptions = {
+        threshold: 0.15
+    };
+
     // 7. SCROLL REVEAL (WORKFLOW)
     const workflowObserverOptions = { threshold: 0.5 };
     const workflowObserver = new IntersectionObserver((entries) => {
