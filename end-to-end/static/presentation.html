@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustLens | Forensic Intelligence Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0f1e;
+            --glass: rgba(255, 255, 255, 0.04);
+            --border: rgba(99, 179, 237, 0.15);
+            --blue-head: #1e3a8a;
+            --purple-head: #581c87;
+            --accent: #4299e1;
+            --fake: #ff2b56;
+            --real: #00ffaa;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* UTILS */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        section { padding: 8rem 0; position: relative; }
+        h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 3rem; text-align: center; color: white; }
+        .card { background: var(--glass); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
+
+        /* 1. HERO */
+        #hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; overflow: hidden; }
+        #particle-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
+        .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: rgba(66, 153, 225, 0.3); box-shadow: 0 0 20px rgba(66, 153, 225, 0.5); z-index: 1; animation: scanMove 4s linear infinite; }
+        @keyframes scanMove { 0% { top: 0; } 100% { top: 100%; } }
+
+        .hero-title { font-size: 6rem; font-weight: 800; letter-spacing: -3px; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff 0%, #63b3ed 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-sub { font-size: 1.5rem; font-weight: 300; color: var(--text-dim); margin-bottom: 3rem; }
+        .hero-stats { display: flex; gap: 4rem; margin-bottom: 3rem; }
+        .stat-item strong { display: block; font-size: 3.5rem; font-weight: 800; color: white; }
+        .stat-item span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); }
+
+        .pill-badge { background: rgba(66, 153, 225, 0.1); border: 1px solid var(--accent); padding: 8px 20px; border-radius: 30px; font-size: 0.75rem; color: var(--accent); font-weight: 600; margin-bottom: 2rem; }
+        .cta-group { display: flex; gap: 1rem; }
+        .btn { padding: 1rem 2.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; border: none; text-decoration: none; }
+        .btn-primary { background: white; color: var(--bg); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: white; }
+
+        /* 2. SPEC STRIP */
+        #spec-strip { background: rgba(0,0,0,0.2); padding: 4rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        .spec-col h4 { font-size: 0.7rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; letter-spacing: 1px; }
+        .spec-item { margin-bottom: 0.5rem; font-size: 0.95rem; }
+        .spec-item b { color: white; margin-right: 10px; }
+
+        /* 3. OBJECTIVE CARDS */
+        .obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .obj-card { overflow: hidden; padding: 0; }
+        .obj-head { padding: 1.5rem 2rem; font-weight: 700; color: white; font-size: 1.1rem; }
+        .obj-content { padding: 2rem; font-size: 0.85rem; color: var(--text-dim); }
+        .obj-content ol { padding-left: 1.2rem; }
+        .obj-content li { margin-bottom: 1rem; line-height: 1.4; }
+
+        /* 4. ARCH FLOW */
+        .pipeline { display: flex; flex-direction: column; gap: 4rem; align-items: center; }
+        .pipe-row { display: flex; gap: 1.5rem; align-items: center; }
+        .node { width: 140px; padding: 1rem; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; text-align: center; font-size: 0.7rem; font-weight: 700; transition: 0.3s; position: relative; }
+        .node.active { background: var(--accent); color: white; border-color: white; box-shadow: 0 0 20px var(--accent); }
+        .arrow { font-size: 1.2rem; color: var(--border); }
+
+        /* 5. HEATMAP */
+        .heatmap-demo { background: rgba(0,0,0,0.3); padding: 3rem; border-radius: 24px; text-align: center; }
+        .chip-stack { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 2rem; min-height: 100px; align-items: center; }
+        .chip { padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; transition: 0.5s; border: 1px solid rgba(255,255,255,0.1); }
+
+        /* 6. BARS */
+        .bars-container { display: flex; justify-content: center; gap: 4rem; align-items: flex-end; height: 300px; padding-bottom: 40px; }
+        .bar-group { display: flex; flex-direction: column; align-items: center; width: 250px; }
+        .bar-stack { display: flex; gap: 10px; align-items: flex-end; width: 100%; justify-content: center; }
+        .bar { width: 40px; background: var(--accent); border-radius: 4px 4px 0 0; transition: height 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); position: relative; }
+        .bar::after { content: attr(data-val); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); padding-bottom: 8px; font-size: 0.7rem; font-weight: 700; }
+        .bar.secondary { background: rgba(255,255,255,0.1); }
+        .bar.purple { background: #a855f7; }
+        .bar.amber { background: #f59e0b; }
+        .bar-label { margin-top: 1.5rem; font-size: 0.7rem; font-weight: 700; text-align: center; color: var(--text-dim); }
+
+        /* 7. DONUT */
+        .donut-wrap { display: flex; justify-content: center; align-items: center; gap: 4rem; }
+        svg.donut { width: 200px; height: 200px; transform: rotate(-90deg); }
+        .donut-ring { fill: none; stroke-width: 20; }
+        .legend { display: flex; flex-direction: column; gap: 1rem; }
+        .legend-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+        /* 8. TECH STRIP */
+        .tech-strip { display: flex; flex-direction: column; align-items: center; gap: 2rem; text-align: center; }
+        .tech-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+        .tech-pill { padding: 6px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .resume-line { font-style: italic; font-size: 1.1rem; color: var(--text-dim); max-width: 800px; }
+
+        /* 9. FOOTER */
+        footer { padding: 4rem 0; background: rgba(0,0,0,0.4); text-align: center; border-top: 1px solid var(--border); }
+        .footer-names { font-weight: 700; color: white; margin-bottom: 0.5rem; }
+        .footer-tag { font-size: 0.8rem; color: var(--text-dim); }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 3.5rem; }
+            .spec-grid, .obj-grid, .obj-grid { grid-template-columns: 1fr; }
+            .bars-container, .donut-wrap { flex-direction: column; height: auto; gap: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. HERO -->
+    <section id="hero">
+        <canvas id="particle-canvas"></canvas>
+        <div class="scan-line"></div>
+        <div class="container">
+            <div class="pill-badge">P05 · Trust & Safety / Social Media AI · Moderate difficulty · 22–27 hrs</div>
+            <h1 class="hero-title">TrustLens</h1>
+            <p class="hero-sub">Forensic Misinformation Detection</p>
+            <div class="hero-stats">
+                <div class="stat-item"><strong id="stat-auc">0.00</strong><span>AUC-ROC</span></div>
+                <div class="stat-item"><strong id="stat-f1">0.00</strong><span>F1-Score</span></div>
+            </div>
+            <div class="cta-group">
+                <button class="btn btn-primary" onclick="document.getElementById('objectives').scrollIntoView()">Review Spec</button>
+                <button class="btn btn-outline" onclick="document.getElementById('architecture').scrollIntoView()">View Architecture</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. SPEC STRIP -->
+    <div id="spec-strip">
+        <div class="container">
+            <div class="spec-grid">
+                <div class="spec-col">
+                    <h4>Core Assignment Parameters</h4>
+                    <div class="spec-item"><b>Domain:</b> Trust & Safety / Social Media AI</div>
+                    <div class="spec-item"><b>Effort:</b> ~22–27 hrs total</div>
+                    <div class="spec-item"><b>Difficulty:</b> Moderate</div>
+                </div>
+                <div class="spec-col">
+                    <h4>Target Engineering Roles</h4>
+                    <div class="spec-item">• ML Engineer</div>
+                    <div class="spec-item">• NLP Engineer</div>
+                    <div class="spec-item">• Data Scientist</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. OBJECTIVES -->
+    <section id="objectives">
+        <div class="container">
+            <h2>Research Objectives</h2>
+            <div class="obj-grid">
+                <div class="card obj-card">
+                    <div class="obj-head" style="background: var(--blue-head);">DL Objective (CSR311 — Deep Learning)</div>
+                    <div class="obj-content">
+                        <ol>
+                            <li>Utilize **LIAR** or **FakeNewsNet** datasets for training/testing.</li>
+                            <li>Preprocess: lowercasing, HTML removal, NLTK tokenization, 200-token padding.</li>
+                            <li>Architecture: **2-layer BiLSTM** (hidden=256) with Scaled Dot-Product Attention.</li>
+                            <li>Classification: Binary Fake/Real mapping via BCELoss + Adam optimizer.</li>
+                            <li>Visualization: Dynamic **Attention Heatmaps** mapping tokens to prediction drive.</li>
+                            <li>Reporting: Benchmarking AUC-ROC (BiLSTM+Attention vs Base).</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="card obj-card">
+                    <div class="obj-head" style="background: var(--purple-head);">NLP Objective (CSR322 — NLP)</div>
+                    <div class="obj-content">
+                        <ol>
+                            <li>Fine-tune **bert-base-uncased** for semantic feature extraction.</li>
+                            <li>Signal Extraction: TF-IDF n-grams, POS distribution (Adj-to-Noun), Sentiment Polarity.</li>
+                            <li>Hybridization: Concat [CLS] embeddings with classical feature vectors (5769d).</li>
+                            <li>Evaluation: Cross-comparing BERT alone vs. Classical alone vs. Hybrid F1.</li>
+                            <li>Error Analysis: Categorizing failure modes for **20 specific misclassifications**.</li>
+                            <li>Discussion: Quantifying the value-add of linguistic stylometry over Transformers.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. ARCHITECTURE -->
+    <section id="architecture" style="background: rgba(0,0,0,0.2);">
+        <div class="container">
+            <h2>Sequential Neural Pipeline</h2>
+            <div class="pipeline">
+                <div class="pipe-row" id="pipe-1">
+                    <div class="node" data-idx="0">Input Tokens</div>
+                    <div class="arrow">→</div>
+                    <div class="node" data-idx="1">Embedding 128d</div>
+                    <div class="arrow">→</div>
+                    <div class="node" data-idx="2">BiLSTM ×2 (256)</div>
+                    <div class="arrow">→</div>
+                    <div class="node" data-idx="3">Self-Attention</div>
+                    <div class="arrow">→</div>
+                    <div class="node" data-idx="4">Sigmoid Verdict</div>
+                </div>
+                <div class="pipe-row" id="pipe-2" style="margin-top: 2rem;">
+                    <div class="node" data-idx="5">Article Text</div>
+                    <div class="arrow">→</div>
+                    <div class="node" data-idx="6">BERT [CLS] + POS</div>
+                    <div class="arrow">→</div>
+                    <div class="node" data-idx="7">Concat 5769d</div>
+                    <div class="arrow">→</div>
+                    <div class="node" data-idx="8">Linear Layer</div>
+                    <div class="arrow">→</div>
+                    <div class="node" data-idx="9">Fake/Real</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. HEATMAP DEMO -->
+    <section id="heatmap">
+        <div class="container">
+            <h2>Real-time Attention Mapping</h2>
+            <div class="heatmap-demo">
+                <p id="heatmap-label" style="font-size: 0.7rem; color: var(--accent); letter-spacing: 2px; margin-bottom: 1rem;">ARTICLE SCAN: FAKE NEWS DETECTION</p>
+                <div id="chip-container" class="chip-stack"></div>
+                <div style="margin-top: 2rem; font-size: 0.8rem; color: var(--text-dim);">The intensity of red indicates the attention weight assigned by the model to each token.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. PERFORMANCE -->
+    <section id="performance" style="background: rgba(0,0,0,0.2);">
+        <div class="container">
+            <h2>Metric Benchmarks</h2>
+            <div class="bars-container">
+                <div class="bar-group">
+                    <div class="bar-stack">
+                        <div class="bar" style="height: 172px;" data-val="0.86"></div>
+                        <div class="bar secondary" style="height: 158px;" data-val="0.79"></div>
+                    </div>
+                    <div class="bar-label">DL: BiLSTM+Attn vs Base</div>
+                </div>
+                <div class="bar-group">
+                    <div class="bar-stack">
+                        <div class="bar purple" style="height: 178px;" data-val="0.89"></div>
+                        <div class="bar secondary" style="height: 166px;" data-val="0.83"></div>
+                        <div class="bar amber" style="height: 144px;" data-val="0.72"></div>
+                    </div>
+                    <div class="bar-label">NLP: Hybrid vs BERT vs Classical</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. ERROR DONUT -->
+    <section id="errors">
+        <div class="container">
+            <h2>Failure Mode Distribution</h2>
+            <div class="donut-wrap">
+                <svg class="donut">
+                    <!-- Donut segments -->
+                    <circle class="donut-ring" cx="100" cy="100" r="80" stroke="#ff2b56" stroke-dasharray="100.5 402.1" stroke-dashoffset="0"></circle> <!-- 20%? No 40% = 502.6*0.4 = 201 -->
+                    <circle class="donut-ring" cx="100" cy="100" r="80" stroke="#f59e0b" stroke-dasharray="150.8 351.8" stroke-dashoffset="-201"></circle> <!-- 30% = 150.8 -->
+                    <circle class="donut-ring" cx="100" cy="100" r="80" stroke="#581c87" stroke-dasharray="150.8 351.8" stroke-dashoffset="-351.8"></circle> <!-- 30% -->
+                </svg>
+                <div class="legend">
+                    <div class="legend-item"><div class="dot" style="background: #ff2b56;"></div> Sarcasm Detection (40%)</div>
+                    <div class="legend-item"><div class="dot" style="background: #f59e0b;"></div> Domain Shift (30%)</div>
+                    <div class="legend-item"><div class="dot" style="background: #581c87;"></div> Keyword Bias (30%)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. TECH STRIP -->
+    <section id="tech" style="background: rgba(0,0,0,0.4);">
+        <div class="container">
+            <div class="tech-strip">
+                <div class="tech-badges">
+                    <div class="tech-pill">PyTorch</div>
+                    <div class="tech-pill">HuggingFace BERT</div>
+                    <div class="tech-pill">NLTK</div>
+                    <div class="tech-pill">TF-IDF</div>
+                    <div class="tech-pill">Attention Visualization</div>
+                </div>
+                <p class="resume-line">"Implemented fake news detector using BiLSTM with attention (AUC: 0.86) and hybrid BERT + classical NLP features; performed error analysis identifying key model failure modes."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-names">Arpita Mahapatra & Namradha Mani</div>
+            <div class="footer-tag">LPU CSE AI/ML Semester VI · April 2026</div>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. PARTICLE CANVAS ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < 80; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2,
+                    vx: Math.random() * 0.5 - 0.25,
+                    vy: Math.random() * 0.5 - 0.25
+                });
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#4299e1';
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', init);
+        init(); animate();
+
+        // --- 2. STAT COUNTERS ---
+        function animateValue(id, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                document.getElementById(id).innerText = (progress * (end - start) + start).toFixed(2);
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
+        setTimeout(() => {
+            animateValue('stat-auc', 0, 0.86, 2000);
+            animateValue('stat-f1', 0, 0.89, 2000);
+        }, 500);
+
+        // --- 3. ARCH FLOW ---
+        let currentIdx = 0;
+        const nodes = document.querySelectorAll('.node');
+        setInterval(() => {
+            nodes.forEach(n => n.classList.remove('active'));
+            nodes[currentIdx].classList.add('active');
+            currentIdx = (currentIdx + 1) % nodes.length;
+        }, 1000);
+
+        // --- 4. HEATMAP DEMO ---
+        const fakeArticle = ["The", "SHOCKING", "truth", "EXPOSED", "by", "scientists", "SECRET", "findings", "URGENT"];
+        const realArticle = ["Research", "indicates", "steady", "growth", "in", "the", "energy", "sector", "reports"];
+        const container = document.getElementById('chip-container');
+        let isFake = true;
+
+        function updateHeatmap() {
+            container.innerHTML = '';
+            const words = isFake ? fakeArticle : realArticle;
+            const label = document.getElementById('heatmap-label');
+            label.innerText = isFake ? "ARTICLE SCAN: SUSPICIOUS CONTENT DETECTED" : "ARTICLE SCAN: RELIABLE NEWS SOURCE";
+            label.style.color = isFake ? "var(--fake)" : "var(--real)";
+
+            words.forEach((w, i) => {
+                const chip = document.createElement('div');
+                chip.className = 'chip';
+                chip.innerText = w;
+                // Fake has high heat on caps, Real is uniform
+                const heat = isFake ? (w === w.toUpperCase() ? 0.8 : 0.1) : 0.1;
+                chip.style.backgroundColor = `rgba(255, 43, 86, ${heat})`;
+                container.appendChild(chip);
+            });
+            isFake = !isFake;
+        }
+        updateHeatmap();
+        setInterval(updateHeatmap, 4000);
+    </script>
+</body>
+</html>

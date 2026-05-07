@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustLens | One-View Forensic Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ONE-VIEW SCALING */
+        html, body { height: 100vh; overflow: hidden; }
+        .view { height: calc(100vh - 80px); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; overflow: hidden; }
+        .hero-bento { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 1rem; }
+        .dashboard-grid { flex: 1; display: grid; grid-template-columns: 350px 1fr; gap: 1.5rem; height: 100%; overflow: hidden; }
+        .output-room { overflow-y: auto; padding-right: 10px; }
+        
+        /* INTERACTIVE ARCHITECTURE */
+        .arch-node { 
+            padding: 1rem; border: 1px solid var(--border); border-radius: 12px; 
+            background: rgba(255,255,255,0.02); cursor: help; transition: 0.3s;
+            position: relative;
+        }
+        .arch-node:hover { background: var(--accent); transform: scale(1.05); }
+        .arch-node .tooltip { 
+            position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
+            background: #000; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.7rem;
+            width: 200px; opacity: 0; pointer-events: none; transition: 0.3s; border: 1px solid var(--accent);
+            z-index: 100;
+        }
+        .arch-node:hover .tooltip { opacity: 1; }
+
+        /* COMPLIANCE CARD */
+        .spec-list { font-size: 0.7rem; color: var(--text-dim); }
+        .spec-item { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+        .check { color: var(--real); }
+    </style>
+</head>
+<body>
+    <div class="cursor-glow" id="cursor-glow"></div>
+
+    <nav class="nav-bar" style="padding: 1rem 5%;">
+        <div class="logo" style="font-size: 1rem;">TRUST<span class="accent">LENS</span> <span class="v-tag">ONE-VIEW</span></div>
+        <div class="nav-links">
+            <button class="nav-item active" data-view="home">Dash</button>
+            <button class="nav-item" data-view="analyzer">Analyzer</button>
+            <button class="nav-item" data-view="architecture">Blueprint</button>
+            <button class="nav-item" data-view="history">Logs</button>
+        </div>
+    </nav>
+
+    <!-- VIEW 1: HOME -->
+    <section id="view-home" class="view active">
+        <div class="hero-bento">
+            <div class="bento-card hero-main" style="grid-row: span 2; padding: 2rem;">
+                <span class="badge">V1.5 STABLE</span>
+                <h1 style="font-size: 3rem;">Neural <br><span class="gradient">Audit</span></h1>
+                <p style="font-size: 0.8rem;">Full-spectrum misinformation detection suite.</p>
+                <button class="btn-trigger" style="margin-top: 1rem;" onclick="switchView('analyzer')">Execute</button>
+            </div>
+            
+            <div class="bento-card" style="grid-column: span 2;">
+                <h4 style="font-size: 0.6rem; letter-spacing: 2px; opacity: 0.5;">REAL-TIME METRICS</h4>
+                <div style="height: 150px;"><canvas id="miniRadar"></canvas></div>
+            </div>
+
+            <div class="bento-card" style="padding: 1.5rem;">
+                <h4 style="font-size: 0.6rem; opacity: 0.5;">COMPLIANCE</h4>
+                <div class="spec-list" style="margin-top: 1rem;">
+                    <div class="spec-item"><span class="check">✔</span> BiLSTM (2-Layer)</div>
+                    <div class="spec-item"><span class="check">✔</span> Self-Attention</div>
+                    <div class="spec-item"><span class="check">✔</span> BERT Hybrid</div>
+                    <div class="spec-item"><span class="check">✔</span> Stylometric POS</div>
+                </div>
+            </div>
+
+            <div class="bento-card" style="grid-column: span 3; display: flex; justify-content: space-around; align-items: center; padding: 1rem;">
+                <div style="text-align: center;"><strong>0.86</strong><br><span style="font-size: 0.5rem; opacity: 0.5;">AUC-ROC</span></div>
+                <div style="text-align: center;"><strong>0.89</strong><br><span style="font-size: 0.5rem; opacity: 0.5;">F1-SCORE</span></div>
+                <div style="text-align: center;"><strong>200</strong><br><span style="font-size: 0.5rem; opacity: 0.5;">TOKEN MAX</span></div>
+                <div style="text-align: center;"><strong>20</strong><br><span style="font-size: 0.5rem; opacity: 0.5;">ERR SAMPLES</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIEW 2: ANALYZER (ONE-SCREEN) -->
+    <section id="view-analyzer" class="view hidden">
+        <div class="dashboard-grid">
+            <aside class="control-sidebar" style="padding: 1.5rem; display: flex; flex-direction: column;">
+                <div class="tab-switcher" style="margin-bottom: 1rem;">
+                    <button class="tab-opt active" data-mode="text">TEXT</button>
+                    <button class="tab-opt" data-mode="url">URL</button>
+                </div>
+                <textarea id="text-input" placeholder="Input..." style="flex: 1; min-height: unset; margin-bottom: 1rem; padding: 1rem; font-size: 0.8rem;"></textarea>
+                <input type="url" id="url-input" placeholder="URL..." class="hidden" style="margin-bottom: 1rem; padding: 1rem; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 12px; color: white;">
+                <button id="analyze-btn" class="btn-trigger">AUDIT</button>
+                <div id="processing-steps" class="terminal-log hidden" style="margin-top: 1rem; font-size: 0.6rem;">
+                    <div class="log-line" id="step-1">CORE BOOTING...</div>
+                    <div class="log-line" id="step-4">ENSEMBLE CALCULATED.</div>
+                </div>
+            </aside>
+
+            <main class="output-room">
+                <div id="results-dashboard" class="hidden" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div class="verdict-hero" style="padding: 1.5rem; margin-bottom: 0;">
+                        <h1 id="verdict-label" style="font-size: 3rem;">---</h1>
+                        <div class="confidence-bar" style="margin-top: 1rem;">
+                            <div class="bar-track"><div id="trust-bar" class="bar-fill"></div></div>
+                        </div>
+                    </div>
+                    <div class="engine-grid" style="gap: 1rem;">
+                        <div class="engine-card" style="padding: 1.5rem;">
+                            <h4 style="font-size: 0.6rem; opacity: 0.5; margin-bottom: 1rem;">HEATMAP</h4>
+                            <div id="heatmap-container" class="heatmap-display" style="font-size: 0.8rem; min-height: 150px;"></div>
+                        </div>
+                        <div class="engine-card" style="padding: 1.5rem;">
+                            <h4 style="font-size: 0.6rem; opacity: 0.5; margin-bottom: 1rem;">SIGNALS</h4>
+                            <div style="height: 120px;"><canvas id="probChart"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- VIEW 3: INTERACTIVE ARCHITECTURE -->
+    <section id="view-architecture" class="view hidden">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Interactive Pipeline</h2>
+        <div style="display: flex; justify-content: center; align-items: center; flex: 1; gap: 2rem;">
+            <div class="arch-node">
+                RAW INPUT
+                <div class="tooltip">Lowercased, HTML removed, Tokenized (NLTK), Padded (200 tokens).</div>
+            </div>
+            <div style="font-size: 1.5rem;">→</div>
+            <div class="arch-node" style="border-color: var(--accent);">
+                BiLSTM CORE
+                <div class="tooltip">2-Layer Bidirectional LSTM. Hidden Dimension: 256. Dropout: 0.3.</div>
+            </div>
+            <div style="font-size: 1.5rem;">→</div>
+            <div class="arch-node" style="border-color: var(--neon);">
+                SELF-ATTENTION
+                <div class="tooltip">Scaled Dot-Product Attention. Drives visual heatmap. Weighted context mapping.</div>
+            </div>
+            <div style="font-size: 1.5rem;">→</div>
+            <div class="arch-node" style="border-color: #fff;">
+                BERT HYBRID
+                <div class="tooltip">BERT-base-uncased [CLS] + Stylometric Features (Adj-to-Noun, Sentiment).</div>
+            </div>
+            <div style="font-size: 1.5rem;">→</div>
+            <div class="arch-node" style="background: var(--accent);">
+                ENSEMBLE
+                <div class="tooltip">Weighted Consensus Score. Final Binary Classification (Real/Fake).</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIEW 4: LOGS -->
+    <section id="view-history" class="view hidden">
+        <div id="history-container" class="history-stack"></div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>

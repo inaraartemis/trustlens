@@ -42,7 +42,7 @@ def fetch_article_text(url):
 # --- LOAD MODELS ---
 def load_bilstm_resources():
     try:
-        with open("fake-news-bilstm-attention/tokenizer.pkl", "rb") as f:
+        with open("../models/fake-news-bilstm-attention/tokenizer.pkl", "rb") as f:
             word2idx = pickle.load(f)
         
         class BiLSTM_Attention(nn.Module):
@@ -64,7 +64,7 @@ def load_bilstm_resources():
                 return out, attn_weights
 
         model = BiLSTM_Attention(vocab_size=10000)
-        model.load_state_dict(torch.load("fake-news-bilstm-attention/models/bilstm_attention.pth", map_location="cpu"))
+        model.load_state_dict(torch.load("../models/fake-news-bilstm-attention/models/bilstm_attention.pth", map_location="cpu"))
         model.eval()
         return word2idx, model
     except Exception as e:
@@ -89,7 +89,7 @@ def load_bert_resources():
                 return self.sigmoid(self.fc(combined))
 
         model = HybridModel()
-        model.load_state_dict(torch.load("bert-hybrid-fake-news/models/hybrid_model.pth", map_location="cpu"))
+        model.load_state_dict(torch.load("../models/bert-hybrid-fake-news/models/hybrid_model.pth", map_location="cpu"))
         model.eval()
         return tokenizer, model
     except Exception as e:
