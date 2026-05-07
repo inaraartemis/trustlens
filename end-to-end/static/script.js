@@ -275,12 +275,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 1. ANTIGRAVITY VORTEX ENGINE
+    // 1. ANTIGRAVITY VORTEX ENGINE (REFINED V2)
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
-    const particleCount = 1500;
-    let mouse = { x: null, y: null, radius: 150 };
+    const particleCount = 2000;
+    let mouse = { x: null, y: null, radius: 200 };
 
     function initCanvas() {
         canvas.width = window.innerWidth;
@@ -293,42 +293,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         reset() {
-            // Distribute in a spherical vortex
-            const angle = Math.random() * Math.PI * 2;
-            const distance = Math.random() * (Math.max(canvas.width, canvas.height) * 0.8);
-            this.baseX = canvas.width / 2 + Math.cos(angle) * distance;
-            this.baseY = canvas.height / 2 + Math.sin(angle) * distance;
+            this.baseX = Math.random() * canvas.width;
+            this.baseY = Math.random() * canvas.height;
             this.x = this.baseX;
             this.y = this.baseY;
-            this.size = Math.random() * 1.5 + 0.5;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.size = Math.random() * 1.5 + 0.2;
             this.color = Math.random() > 0.5 ? '#00f5d4' : '#6366f1';
-            this.density = (Math.random() * 30) + 1;
+            this.density = (Math.random() * 20) + 1;
         }
 
         update() {
             let dx = mouse.x - this.x;
             let dy = mouse.y - this.y;
             let distance = Math.sqrt(dx * dx + dy * dy);
-            let forceDirectionX = dx / distance;
-            let forceDirectionY = dy / distance;
-            let maxDistance = mouse.radius;
-            let force = (maxDistance - distance) / maxDistance;
-            let directionX = forceDirectionX * force * this.density;
-            let directionY = forceDirectionY * force * this.density;
-
+            
             if (distance < mouse.radius) {
-                this.x -= directionX;
-                this.y -= directionY;
-            } else {
-                if (this.x !== this.baseX) {
-                    let dx = this.x - this.baseX;
-                    this.x -= dx / 10;
-                }
-                if (this.y !== this.baseY) {
-                    let dy = this.y - this.baseY;
-                    this.y -= dy / 10;
-                }
+                // Orbital / Swirl Force
+                const force = (mouse.radius - distance) / mouse.radius;
+                const angle = Math.atan2(dy, dx);
+                
+                // Pull towards mouse
+                this.vx += Math.cos(angle) * force * 0.5;
+                this.vy += Math.sin(angle) * force * 0.5;
+                
+                // Orbit around mouse (Perpendicular force)
+                this.vx += Math.sin(angle) * force * 2.5;
+                this.vy -= Math.cos(angle) * force * 2.5;
             }
+
+            // Return to base position
+            let dxBase = this.x - this.baseX;
+            let dyBase = this.y - this.baseY;
+            this.vx -= dxBase * 0.01;
+            this.vy -= dyBase * 0.01;
+
+            // Apply friction
+            this.vx *= 0.95;
+            this.vy *= 0.95;
+
+            this.x += this.vx;
+            this.y += this.vy;
         }
 
         draw() {
@@ -348,7 +354,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Motion Blur Trail Effect
+        ctx.fillStyle = 'rgba(3, 5, 13, 0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         for (let i = 0; i < particles.length; i++) {
             particles[i].update();
             particles[i].draw();
