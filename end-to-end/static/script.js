@@ -284,14 +284,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const { clientX, clientY } = e;
             const { innerWidth, innerHeight } = window;
             
-            // Calculate offset from center (-0.5 to 0.5)
-            const moveX = (clientX / innerWidth) - 0.5;
-            const moveY = (clientY / innerHeight) - 0.5;
+            // Normalize coordinates (-1 to 1)
+            const x = (clientX / innerWidth - 0.5) * 2;
+            const y = (clientY / innerHeight - 0.5) * 2;
             
-            // Intensity of the shift
-            const intensity = 30; 
+            // Calculate rotation angles (Max 15 degrees)
+            const rotateY = x * 15;
+            const rotateX = -y * 15;
             
-            heroBg.style.transform = `translate(${moveX * intensity}px, ${moveY * intensity}px) scale(1.05)`;
+            heroBg.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(0)`;
+        });
+
+        // Reset on mouse leave
+        hero.addEventListener('mouseleave', () => {
+            heroBg.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0)`;
         });
     }
 
