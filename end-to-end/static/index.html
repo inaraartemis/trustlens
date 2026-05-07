@@ -14,17 +14,17 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         :root {
-            --bg: #03050d;
-            --purple: #6366f1;
-            --cyan: #00f5d4;
-            --pink: #ff006e;
-            --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
+            --bg: #020617;
+            --purple: #f59e0b;
+            --cyan: #fbbf24;
+            --pink: #ffffff;
+            --glass: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.05);
         }
 
         /* Tech Cursor */
         * {
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%2300f5d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>') 10 10, auto;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>') 10 10, auto;
         }
 
         body {
@@ -51,6 +51,9 @@
             align-items: center;
             text-align: center;
             position: relative;
+            background: linear-gradient(rgba(2, 6, 23, 0.8), rgba(2, 6, 23, 0.95)), url('hero_amber.png');
+            background-size: cover;
+            background-position: center;
         }
 
         #particle-canvas {
@@ -133,6 +136,7 @@
             background: linear-gradient(135deg, #fff, var(--cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(251, 191, 36, 0.2));
         }
 
         .hero-subtitle {
@@ -195,7 +199,7 @@
         .wf-step.active .wf-icon {
             border-color: var(--cyan);
             color: var(--cyan);
-            box-shadow: 0 0 30px rgba(0, 245, 212, 0.4);
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
             animation: neuralPulse 2s infinite ease-in-out;
         }
 
@@ -322,7 +326,7 @@
             align-items: center;
             gap: 1rem;
             padding: 1.2rem 2.5rem;
-            background: rgba(0, 245, 212, 0.1);
+            background: rgba(251, 191, 36, 0.1);
             border: 1px solid var(--cyan);
             color: var(--cyan);
             border-radius: 50px;
@@ -607,7 +611,7 @@
 
         #run-audit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 245, 212, 0.3);
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
         }
 
         #run-audit i {
@@ -742,6 +746,9 @@
             margin: 1rem 0;
             letter-spacing: -3px;
             line-height: 1;
+            background: linear-gradient(135deg, #fff, var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .confidence-gauge {
@@ -755,7 +762,7 @@
         .gauge-fill {
             height: 100%;
             background: var(--cyan);
-            box-shadow: 0 0 15px var(--cyan);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
             transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             width: 0;
         }
@@ -1001,7 +1008,7 @@
                 
                 <div style="display: flex; gap: 2rem; align-items: center;">
                     <a href="#auditor" 
-                        style="display: flex; align-items: center; gap: 1rem; background: var(--cyan); color: #000; padding: 1.2rem 3.5rem; border-radius: 50px; font-weight: 800; text-decoration: none; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 0 40px rgba(0, 245, 212, 0.2);">
+                        style="display: flex; align-items: center; gap: 1rem; background: var(--cyan); color: #000; padding: 1.2rem 3.5rem; border-radius: 50px; font-weight: 800; text-decoration: none; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 0 40px rgba(251, 191, 36, 0.2);">
                         <i class="fas fa-search"></i> INITIATE FORENSIC SCAN
                     </a>
 
